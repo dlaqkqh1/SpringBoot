@@ -6,6 +6,14 @@ logging:
     org.springframework: DEBUG
 
 spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 #  messages:
 #    basename: messages
   mvc:
