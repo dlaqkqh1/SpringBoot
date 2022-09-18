@@ -26,7 +26,19 @@ class ProductControllerTest {
                         .content("{\"title\": \"제목\", \"content\": \"내용\"}")
                 ) // application/json
                 .andExpect(status().isOk())
-                .andExpect(content().string("Hello World"))
+                .andExpect(content().string("{}"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/products 요청 시 title 값은 필수다.")
+    void test2() throws Exception {
+        mockMvc.perform(post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": null, \"content\": \"내용\"}")
+                ) // application/json
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("타이틀을 입력해주세요.")) // jsonPath
                 .andDo(print());
     }
 }

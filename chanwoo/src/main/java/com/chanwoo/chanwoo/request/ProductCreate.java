@@ -1,23 +1,19 @@
 package com.chanwoo.chanwoo.request;
 
+import lombok.Setter;
+import lombok.Getter;
+import lombok.ToString;
+
+import javax.validation.constraints.NotBlank;
+
+@Setter
+@Getter
+@ToString
 public class ProductCreate {
+    @NotBlank(message = "타이틀을 입력해주세요.")
+    private String title;
 
-    public String title;
-    public String content;
+    @NotBlank(message = "콘텐츠를 입력해주세요.")
+    private String content;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductCreate{" +
-                "title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
 }
