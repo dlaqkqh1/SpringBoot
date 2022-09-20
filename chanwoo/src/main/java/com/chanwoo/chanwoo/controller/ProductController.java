@@ -16,17 +16,7 @@ import java.util.Map;
 public class ProductController {
 
     @PostMapping("/products")
-    public Map<String, String> post(@RequestBody @Valid ProductCreate params, BindingResult result) {
-        if (result.hasErrors()) { // 에러 체크
-            List<FieldError> fieldErrors = result.getFieldErrors();
-            FieldError firstFieldError = fieldErrors.get(0);
-            String fieldName = firstFieldError.getField();
-            String errorMessage = firstFieldError.getDefaultMessage();
-
-            Map<String, String> error = new HashMap<>();
-            error.put(fieldName, errorMessage);
-            return error;
-        }
-        return Map.of();
+    public Map<String, String> post(@RequestBody @Valid ProductCreate params) {
+            return Map.of();
     }
 }

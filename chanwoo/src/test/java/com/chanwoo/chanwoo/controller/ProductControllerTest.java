@@ -37,8 +37,10 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"title\": null, \"content\": \"내용\"}")
                 ) // application/json
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("타이틀을 입력해주세요.")) // jsonPath
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400")) // jsonPath
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다.")) // jsonPath
+                .andExpect(jsonPath("$.vaildation.title").value("타이틀을 입력해주세요.")) // jsonPath
                 .andDo(print());
     }
 }
