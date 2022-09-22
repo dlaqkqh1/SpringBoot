@@ -16,7 +16,11 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public void write(ProductCreate productcreate) {
-        Product product = new Product(productcreate.getTitle(), productcreate.getContent());
+        Product product = Product.builder()
+                .title(productcreate.getTitle())
+                .content(productcreate.getContent())
+                .build();
+        
         productRepository.save(product);
     }
 }

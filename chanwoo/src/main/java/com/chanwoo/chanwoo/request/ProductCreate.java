@@ -1,8 +1,6 @@
 package com.chanwoo.chanwoo.request;
 
-import lombok.Setter;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
@@ -16,4 +14,9 @@ public class ProductCreate {
     @NotBlank(message = "콘텐츠를 입력해주세요.")
     private String content;
 
+    @Builder
+    public ProductCreate(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

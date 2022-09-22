@@ -21,8 +21,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/products")
-    public Map<String, String> post(@RequestBody @Valid ProductCreate request) {
+    public void post(@RequestBody @Valid ProductCreate request) {
         productService.write(request);
-        return Map.of();
     }
 }
