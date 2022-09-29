@@ -26,4 +26,5 @@ public class Product {
         this.title = title;
         this.content = content;
     }
+
 }

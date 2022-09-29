@@ -108,4 +108,23 @@ class ProductControllerTest {
         assertEquals("제목입니다.", product.getTitle());
         assertEquals("내용", product.getContent());
     }
+
+    @Test
+    @DisplayName("글 1개 조회")
+    void test4() throws Exception {
+        Product product = Product.builder()
+                .title("123456789012345")
+                .content("bar")
+                .build();
+        productRepository.save(product);
+
+        mockMvc.perform(get("/products/{productId}", product.getId())
+                        .contentType(APPLICATION_JSON)
+                ) // application/json
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(product.getId()))
+                .andExpect(jsonPath("$.title").value("1234567890"))
+                .andExpect(jsonPath("$.content").value("bar"))
+                .andDo(print());
+    }
 }
