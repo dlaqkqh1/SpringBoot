@@ -4,6 +4,7 @@ import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -125,6 +127,34 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.id").value(product.getId()))
                 .andExpect(jsonPath("$.title").value("1234567890"))
                 .andExpect(jsonPath("$.content").value("bar"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test5() throws Exception {
+
+        Product product1 = productRepository.save(Product.builder()
+                .title("title_1")
+                .content("content_1")
+                .build());
+
+        Product product2 = productRepository.save(Product.builder()
+                .title("title_2")
+                .content("content_2")
+                .build());
+
+        mockMvc.perform(get("/products")
+                        .contentType(APPLICATION_JSON)
+                ) // application/json
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$[0].id").value(product1.getId()))
+                .andExpect(jsonPath("$[0].title").value("title_1"))
+                .andExpect(jsonPath("$[0].content").value("content_1"))
+                .andExpect(jsonPath("$[1].id").value(product2.getId()))
+                .andExpect(jsonPath("$[1].title").value("title_2"))
+                .andExpect(jsonPath("$[1].content").value("content_2"))
                 .andDo(print());
     }
 }

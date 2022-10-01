@@ -1,5 +1,6 @@
 package com.chanwoo.chanwoo.controller;
 
+import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.request.ProductCreate;
 import com.chanwoo.chanwoo.response.ProductResponse;
 import com.chanwoo.chanwoo.service.ProductService;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,9 +24,14 @@ public class ProductController {
     }
 
     @GetMapping("/products/{productId}")
-    public ProductResponse get(@PathVariable(name = "productId") Long id) {
-        ProductResponse response = productService.get(id);
+    public ProductResponse get(@PathVariable(name = "productId") Long productId) {
+        ProductResponse response = productService.get(productId);
 
         return response;
+    }
+
+    @GetMapping("/products")
+    public List<ProductResponse> getList(){
+        return productService.getList();
     }
 }

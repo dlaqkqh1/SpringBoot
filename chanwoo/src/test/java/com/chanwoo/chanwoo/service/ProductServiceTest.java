@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -53,12 +55,31 @@ class ProductServiceTest {
                 .build();
         productRepository.save(requestProduct);
 
-        Long productId = 2L;
-        ProductResponse response = productService.get(productId);
+        ProductResponse response = productService.get(requestProduct.getId());
 
         assertNotNull(response);
+        assertEquals(1L, productRepository.count());
         assertEquals("foo", response.getTitle());
         assertEquals("bar", response.getContent());
+    }
+
+    @Test
+    @DisplayName("글 1페이지 조회")
+    void test3() {
+        productRepository.saveAll(List.of(
+                Product.builder()
+                        .title("foo1")
+                        .content("bar1")
+                        .build(),
+                Product.builder()
+                        .title("foo2")
+                        .content("bar2")
+                        .build()
+        ));
+
+        List<ProductResponse> products = productService.getList();
+
+        assertEquals(2L, products.size());
     }
 
 }

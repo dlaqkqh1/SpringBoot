@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,12 +31,16 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        ProductResponse response = ProductResponse.builder()
+        return ProductResponse.builder()
                 .id(product.getId())
                 .title(product.getTitle())
                 .content(product.getContent())
                 .build();
+    }
 
-        return response;
+    public List<ProductResponse> getList() {
+        return productRepository.findAll().stream()
+                .map(ProductResponse::new)
+                .collect(Collectors.toList());
     }
 }
