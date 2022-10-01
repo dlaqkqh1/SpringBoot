@@ -6,6 +6,9 @@ import com.chanwoo.chanwoo.request.ProductCreate;
 import com.chanwoo.chanwoo.response.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,8 +41,9 @@ public class ProductService {
                 .build();
     }
 
-    public List<ProductResponse> getList() {
-        return productRepository.findAll().stream()
+    // JPA 상속 받으면서 findAll(Pageable) 이 사용 가능
+    public List<ProductResponse> getList(Pageable pageable) {
+        return productRepository.findAll(pageable).stream()
                 .map(ProductResponse::new)
                 .collect(Collectors.toList());
     }
