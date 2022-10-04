@@ -3,6 +3,7 @@ package com.chanwoo.chanwoo.service;
 import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
+import com.chanwoo.chanwoo.request.ProductSearch;
 import com.chanwoo.chanwoo.response.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -73,7 +74,7 @@ class ProductServiceTest {
     @DisplayName("글 1페이지 조회")
     void test3() {
 
-        List<Product> requestProducts = IntStream.range(1, 31)
+        List<Product> requestProducts = IntStream.range(0, 20)
                         .mapToObj(i -> Product.builder()
                                 .title("상품 제목 " + i)
                                 .content("상품이에요. " + i)
@@ -82,13 +83,16 @@ class ProductServiceTest {
 
         productRepository.saveAll(requestProducts);
 
-        Pageable pageable = PageRequest.of(0, 5, DESC, "id");
-        List<ProductResponse> products = productService.getList(pageable);
+        ProductSearch productSearch = ProductSearch.builder()
+                .page(1)
+                .size(10)
+                .build();
 
-        assertEquals(5L, products.size());
+        List<ProductResponse> products = productService.getList(productSearch);
 
-        assertEquals("상품 제목 30", products.get(0).getTitle());
-        assertEquals("상품 제목 26", products.get(4).getTitle());
+        assertEquals(10L, products.size());
+
+        assertEquals("상품 제목 19", products.get(0).getTitle());
     }
 
 }

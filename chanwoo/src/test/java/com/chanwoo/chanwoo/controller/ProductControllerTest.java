@@ -134,10 +134,10 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("글 여러개 조회")
+    @DisplayName("페이지 0으로 조회해도 1페이지 조회")
     void test5() throws Exception {
 
-        List<Product> requestProducts = IntStream.range(1, 31)
+        List<Product> requestProducts = IntStream.range(0, 20)
                 .mapToObj(i -> Product.builder()
                         .title("상품 제목 " + i)
                         .content("상품이에요. " + i)
@@ -146,13 +146,12 @@ class ProductControllerTest {
 
         productRepository.saveAll(requestProducts);
 
-        mockMvc.perform(get("/products?page=1&sort=id,desc")
+        mockMvc.perform(get("/products?page=0&size=10")
                         .contentType(APPLICATION_JSON)) // application/json
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(5)))
-                .andExpect(jsonPath("$[0].id").value(30))
-                .andExpect(jsonPath("$[0].title").value("상품 제목 30"))
-                .andExpect(jsonPath("$[0].content").value("상품이에요. 30"))
+                .andExpect(jsonPath("$.length()", is(10)))
+                .andExpect(jsonPath("$[0].title").value("상품 제목 19"))
+                .andExpect(jsonPath("$[0].content").value("상품이에요. 19"))
                 .andDo(print());
     }
 }

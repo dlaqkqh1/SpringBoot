@@ -3,6 +3,7 @@ package com.chanwoo.chanwoo.service;
 import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
+import com.chanwoo.chanwoo.request.ProductSearch;
 import com.chanwoo.chanwoo.response.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +43,8 @@ public class ProductService {
     }
 
     // JPA 상속 받으면서 findAll(Pageable) 이 사용 가능
-    public List<ProductResponse> getList(Pageable pageable) {
-        return productRepository.findAll(pageable).stream()
+    public List<ProductResponse> getList(ProductSearch productSearch) {
+        return productRepository.getList(productSearch).stream()
                 .map(ProductResponse::new)
                 .collect(Collectors.toList());
     }
