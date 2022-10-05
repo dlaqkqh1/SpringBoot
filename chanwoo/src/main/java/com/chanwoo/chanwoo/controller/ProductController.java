@@ -2,6 +2,7 @@ package com.chanwoo.chanwoo.controller;
 
 import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.request.ProductCreate;
+import com.chanwoo.chanwoo.request.ProductEdit;
 import com.chanwoo.chanwoo.request.ProductSearch;
 import com.chanwoo.chanwoo.response.ProductResponse;
 import com.chanwoo.chanwoo.service.ProductService;
@@ -36,5 +37,10 @@ public class ProductController {
     @GetMapping("/products")
     public List<ProductResponse> getList(@ModelAttribute ProductSearch productSearch){
         return productService.getList(productSearch);
+    }
+
+    @PatchMapping("/products/{productId}")
+    public void edit(@PathVariable Long productId, @RequestBody @Valid ProductEdit request){
+        productService.edit(productId, request);
     }
 }

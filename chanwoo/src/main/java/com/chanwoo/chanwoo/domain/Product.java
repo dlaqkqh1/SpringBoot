@@ -1,9 +1,6 @@
 package com.chanwoo.chanwoo.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -25,6 +22,17 @@ public class Product {
     public Product(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public ProductEditor.ProductEditorBuilder toEditer() {
+        return ProductEditor.builder()
+                .title(title)
+                .content(content);
+    }
+
+    public void edit(ProductEditor productEditor) {
+        this.title = productEditor.getTitle();
+        this.content = productEditor.getContent();
     }
 
 }

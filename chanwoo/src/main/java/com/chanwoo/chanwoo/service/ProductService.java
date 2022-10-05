@@ -1,8 +1,10 @@
 package com.chanwoo.chanwoo.service;
 
 import com.chanwoo.chanwoo.domain.Product;
+import com.chanwoo.chanwoo.domain.ProductEditor;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
+import com.chanwoo.chanwoo.request.ProductEdit;
 import com.chanwoo.chanwoo.request.ProductSearch;
 import com.chanwoo.chanwoo.response.ProductResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,4 +51,19 @@ public class ProductService {
                 .map(ProductResponse::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void edit(Long id, ProductEdit productEdit) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        ProductEditor.ProductEditorBuilder productEditorBuilder = product.toEditer();
+
+        ProductEditor productEditor = productEditorBuilder.title(productEdit.getTitle())
+                .content(productEdit.getContent())
+                .build();
+
+        product.edit(productEditor);
+    }
+
 }

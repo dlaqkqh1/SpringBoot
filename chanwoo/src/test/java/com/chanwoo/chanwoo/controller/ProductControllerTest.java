@@ -3,6 +3,7 @@ package com.chanwoo.chanwoo.controller;
 import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
+import com.chanwoo.chanwoo.request.ProductEdit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -152,6 +153,29 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.length()", is(10)))
                 .andExpect(jsonPath("$[0].title").value("상품 제목 19"))
                 .andExpect(jsonPath("$[0].content").value("상품이에요. 19"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test6() throws Exception {
+
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        productRepository.save(product);
+
+        ProductEdit productEdit = ProductEdit.builder()
+                .title("제목수정")
+                .content("내용수정")
+                .build();
+
+        mockMvc.perform(patch("/products/{productId}", product.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productEdit))) // application/json
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

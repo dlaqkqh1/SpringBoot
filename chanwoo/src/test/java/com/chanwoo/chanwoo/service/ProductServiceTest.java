@@ -3,8 +3,10 @@ package com.chanwoo.chanwoo.service;
 import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
+import com.chanwoo.chanwoo.request.ProductEdit;
 import com.chanwoo.chanwoo.request.ProductSearch;
 import com.chanwoo.chanwoo.response.ProductResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -93,6 +95,30 @@ class ProductServiceTest {
         assertEquals(10L, products.size());
 
         assertEquals("상품 제목 19", products.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        productRepository.save(product);
+
+        ProductEdit productEdit = ProductEdit.builder()
+                .title("제목수정")
+                .content("내용수정")
+                .build();
+
+        productService.edit(product.getId(), productEdit);
+
+        Product changeProduct = productRepository.findById(product.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + product.getId()));
+        Assertions.assertEquals("제목수정", changeProduct.getTitle());
+        Assertions.assertEquals("내용수정", changeProduct.getContent());
     }
 
 }
