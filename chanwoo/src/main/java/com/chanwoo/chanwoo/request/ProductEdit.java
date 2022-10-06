@@ -1,5 +1,6 @@
 package com.chanwoo.chanwoo.request;
 
+import com.chanwoo.chanwoo.domain.ProductEditor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +24,5 @@ public class ProductEdit {
         this.title = title;
         this.content = content;
     }
+
 }

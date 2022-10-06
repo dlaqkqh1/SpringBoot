@@ -66,4 +66,10 @@ public class ProductService {
         product.edit(productEditor);
     }
 
+    public void delete(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        productRepository.delete(product);
+    }
 }

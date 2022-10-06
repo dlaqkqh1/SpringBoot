@@ -121,4 +121,43 @@ class ProductServiceTest {
         Assertions.assertEquals("내용수정", changeProduct.getContent());
     }
 
+    @Test
+    @DisplayName("글 제목 수정")
+    void test5() {
+
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        productRepository.save(product);
+
+        ProductEdit productEdit = ProductEdit.builder()
+                .title(null)
+                .content("내용수정")
+                .build();
+
+        productService.edit(product.getId(), productEdit);
+
+        Product changeProduct = productRepository.findById(product.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + product.getId()));
+        Assertions.assertEquals("제목", changeProduct.getTitle());
+        Assertions.assertEquals("내용수정", changeProduct.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test6() {
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        productRepository.save(product);
+
+        productService.delete(product.getId());
+
+        Assertions.assertEquals(0L, productRepository.count());
+    }
+
 }

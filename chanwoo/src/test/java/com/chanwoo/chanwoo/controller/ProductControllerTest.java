@@ -178,4 +178,21 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test7() throws Exception {
+
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        productRepository.save(product);
+
+        mockMvc.perform(delete("/products/{productId}", product.getId())
+                        .contentType(APPLICATION_JSON)) // application/json
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }
