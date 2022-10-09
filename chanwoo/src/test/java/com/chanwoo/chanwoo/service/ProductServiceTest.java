@@ -1,6 +1,7 @@
 package com.chanwoo.chanwoo.service;
 
 import com.chanwoo.chanwoo.domain.Product;
+import com.chanwoo.chanwoo.exception.ProductNotFound;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
 import com.chanwoo.chanwoo.request.ProductEdit;
@@ -20,8 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @SpringBootTest
@@ -160,4 +160,56 @@ class ProductServiceTest {
         Assertions.assertEquals(0L, productRepository.count());
     }
 
+    @Test
+    @DisplayName("글 1개 조회")
+    void test7() {
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        productRepository.save(product);
+
+        assertThrows(ProductNotFound.class, () -> {
+            productService.get(product.getId() + 1L);
+        });
+
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 - 존재하지 않는 글")
+    void test8() {
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        productRepository.save(product);
+
+        assertThrows(ProductNotFound.class, () -> {
+            productService.get(product.getId() + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("글 제목 수정 - 존재하지 않는 글")
+    void test9 () {
+
+        Product product = Product.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        productRepository.save(product);
+
+        ProductEdit productEdit = ProductEdit.builder()
+                .title("제목수정")
+                .content("내용수정")
+                .build();
+
+
+        assertThrows(ProductNotFound.class, () -> {
+            productService.edit(product.getId() + 1, productEdit);
+        });
+
+    }
 }

@@ -2,6 +2,7 @@ package com.chanwoo.chanwoo.service;
 
 import com.chanwoo.chanwoo.domain.Product;
 import com.chanwoo.chanwoo.domain.ProductEditor;
+import com.chanwoo.chanwoo.exception.ProductNotFound;
 import com.chanwoo.chanwoo.repository.ProductRepository;
 import com.chanwoo.chanwoo.request.ProductCreate;
 import com.chanwoo.chanwoo.request.ProductEdit;
@@ -36,7 +37,7 @@ public class ProductService {
 
     public ProductResponse get(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+                .orElseThrow(ProductNotFound::new);
 
         return ProductResponse.builder()
                 .id(product.getId())
@@ -55,7 +56,7 @@ public class ProductService {
     @Transactional
     public void edit(Long id, ProductEdit productEdit) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(ProductNotFound::new);
 
         ProductEditor.ProductEditorBuilder productEditorBuilder = product.toEditer();
 
@@ -68,7 +69,7 @@ public class ProductService {
 
     public void delete(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(ProductNotFound::new);
 
         productRepository.delete(product);
     }
