@@ -1,6 +1,7 @@
 package com.chanwoo.chanwoo.controller;
 
 import com.chanwoo.chanwoo.domain.Product;
+import com.chanwoo.chanwoo.exception.InvalidRequest;
 import com.chanwoo.chanwoo.request.ProductCreate;
 import com.chanwoo.chanwoo.request.ProductEdit;
 import com.chanwoo.chanwoo.request.ProductSearch;
@@ -24,6 +25,7 @@ public class ProductController {
 
     @PostMapping("/products")
     public void post(@RequestBody @Valid ProductCreate request) {
+       request.vaildate();
         productService.write(request);
     }
 

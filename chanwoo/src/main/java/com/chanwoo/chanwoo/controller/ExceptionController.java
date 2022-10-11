@@ -1,7 +1,10 @@
 package com.chanwoo.chanwoo.controller;
 
+import com.chanwoo.chanwoo.exception.ChanwooException;
+import com.chanwoo.chanwoo.exception.InvalidRequest;
 import com.chanwoo.chanwoo.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,14 +14,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @ControllerAdvice
-@ResponseBody
+
 public class ExceptionController  {
 
+    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorResponse inValidRequestHandler(MethodArgumentNotValidException e) {
@@ -33,6 +34,23 @@ public class ExceptionController  {
         for (FieldError fieldError : e.getFieldErrors()) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
+
+        return response;
+    }
+
+    @ResponseBody
+    @ExceptionHandler(ChanwooException.class)
+    public ResponseEntity<ErrorResponse> chanwooException(ChanwooException e){
+        int statusCode = e.getStatusCode();
+
+        ErrorResponse body = ErrorResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
+                .body(body);
 
         return response;
     }

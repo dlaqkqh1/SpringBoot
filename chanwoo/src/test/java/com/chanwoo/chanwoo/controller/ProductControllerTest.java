@@ -90,7 +90,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("/products 요청 시 title 값은 필수다.")
+    @DisplayName("타이틀 요청 시 게시글 저장")
     void test3() throws Exception {
 
         ProductCreate request = ProductCreate.builder()
@@ -194,5 +194,53 @@ class ProductControllerTest {
                         .contentType(APPLICATION_JSON)) // application/json
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    void test9() throws Exception {
+
+        mockMvc.perform(delete("/products/{productId}", 1L)
+                        .contentType(APPLICATION_JSON)) // application/json
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 수정")
+    void test10() throws Exception {
+
+        ProductEdit productEdit = ProductEdit.builder()
+                .title("제목수정")
+                .content("내용수정")
+                .build();
+
+        mockMvc.perform(patch("/products/{productId}", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productEdit))) // application/json
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 작성시 제목에 '바보'는 포함될 수 없다.")
+    void test11() throws Exception {
+
+        ProductCreate request = ProductCreate.builder()
+                .title("나는 바보입니다.")
+                .content("내용")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        // when
+        mockMvc.perform(post("/products")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                ) // application/json
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        // then
     }
 }
