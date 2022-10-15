@@ -83,9 +83,6 @@ class ProductControllerTest {
                         .content(json)
                 ) // application/json
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("400")) // jsonPath
-                .andExpect(jsonPath("$.message").value("잘못된 요청입니다.")) // jsonPath
-                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요.")) // jsonPath
                 .andDo(print());
     }
 
