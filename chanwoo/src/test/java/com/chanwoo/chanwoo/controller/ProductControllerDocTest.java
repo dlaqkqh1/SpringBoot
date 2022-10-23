@@ -18,6 +18,7 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
+import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -30,6 +31,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,7 +60,7 @@ public class ProductControllerDocTest {
 */
 
     @Test
-    @DisplayName("움")
+    @DisplayName("글 단건 조회")
     void test1() throws Exception {
         
         Product product = Product.builder()
@@ -71,7 +73,7 @@ public class ProductControllerDocTest {
                         .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("index"
+                .andDo(document("product-inquiry"
                         , pathParameters(
                             RequestDocumentation.parameterWithName("productId").description("게시글 ID")
                         ),
@@ -99,10 +101,11 @@ public class ProductControllerDocTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("index",
+                .andDo(document("product-create",
                         requestFields(
-                                fieldWithPath("title").description("제목"),
-                                fieldWithPath("content").description("내용")
+                                fieldWithPath("title").description("제목")
+                                        .attributes(key("constraint").value("좋은제목 입력")),
+                                fieldWithPath("content").description("내용").optional()
                         )
                 ));
     }
